@@ -1,0 +1,128 @@
+﻿@model DiplomWebShopVN.Models.DTO.RegistrationModel
+<style>
+    #showpassimg{
+        opacity:0.6;
+    }
+
+    #showpassimg:hover {
+        opacity: 1;
+    }
+
+
+    #bodyrenderid {
+        background-image: url('/images/Sea_Tropics_Palms_550125_2560x1440.jpg');
+        background-repeat: space;
+        background-size: cover;
+    }
+
+</style>
+        <div style="border-radius:5px; margin:auto; width:40%; border: 3px dotted yellow;
+    background-image: linear-gradient(to right bottom, #64f9d6, #48fcc7, #2efdb5, #1aff9f, #1dff85, #16ff89, #0cff8e, #00ff92, #00ffb2, #00ffcd, #30fee2, #5ffbf1);" class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form asp-action="Registration" method="post">
+                <h3 style="color:darkmagenta; text-align:center">Форма для реєстрації</h3>       
+                        <div class="form-group">
+                            <label style="font-weight:500;">Введіть ваше ім'я:</label>
+                            <input type="text" class="form-control" asp-for="Name" value="@Model.Name"/>
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+                <div class="form-group">
+                    <label style="font-weight:500;">Введіть ваше прізвище:</label>
+                    <input type="text" class="form-control" asp-for="Prizvyshe" value="@Model.Prizvyshe"/>
+                    <span class="text-danger" asp-validation-for="Prizvyshe"></span>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight:500;">Введіть ваш номер телефона:</label>
+                    <input type="tel" class="form-control" asp-for="Phone" value="@Model.Phone" />
+                    <span class="text-danger" asp-validation-for="Phone"></span>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight:500;">Введіть свою електронну адресу (латиницею):</label>
+                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+
+                        <div class="form-group">
+                    <label style ="font-weight:500;">Введіть нове Ім'я користувача (латиницею):</label>
+                    <input type="text" class="form-control" asp-for="UserName" value="@Model.UserName" />
+                            <span class="text-danger" asp-validation-for="UserName"></span>
+                        </div>
+
+                        <div class="form-group">
+                    <label style="font-weight:500;">Введіть пароль (латиницею, мін 6, 1 вел, 1 мал, 1 ц, 1 знак):</label>
+                            <div class="d-flex flex-row">
+                        <input id="passid" type="password" class="form-control" asp-for="Password" value="@Model.Password"/>
+                        <img onclick="ShowPasswords()" style="margin-left:5px;" id="showpassimg" src="~/images/show_icon_183921.png" />
+                            </div>                           
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                        </div>
+
+                        <div class="form-group">
+                    <label style="font-weight:500;">Повторіть ввод паролю:</label>
+                    <input onfocus="Hidepassword()" id="passconfirmid" type="password" class="form-control" asp-for="PasswordConfirm" />
+                            <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+                        </div>
+                        @if (TempData["msg"] != null)
+                        {
+                            <div class="form-group">
+                                <h4 class="alert-info">@TempData["msg"]</h4>
+                            </div>
+                            @if ((int)TempData["statuscode"] == 1)
+                            {
+                                <script type="text/javascript">
+                                    function sleep(ms) {
+                                        return new Promise((resolve, reject) => {
+                                            setTimeout(() => {
+                                                resolve(ms);
+                                            }, ms);
+                                        })
+                                    }
+                                    async function myFunction() {
+                                        await sleep(7000);
+                                        window.location.replace("/UserAuthentication/Login");
+                                    }
+                                    myFunction();
+                                </script>
+                            }
+                        }
+                        <div class="form-group">
+                            <br />
+                    <button style="margin-left:10%; width:150px;" type="submit" class="btn btn-primary">Зареєструватись</button>
+                            <a class="btn btn-success" style="margin-left:30%;" href="/UserAuthentication/Login">Увійти</a>
+                        </div>
+                        <br />
+                    </form>
+                </div>
+            </div>
+        </div>
+        @section Scripts{
+           
+            <script type="text/javascript">
+            
+                function ShowPasswords()
+                {
+                   var x = document.getElementById("passid");
+                   var y = document.getElementById("passconfirmid");
+                   if (x.type === "password") 
+                   {
+                    x.type = "text";
+                    y.type = "text";
+                   } 
+                   else 
+                   {
+                    x.type = "password";
+                    y.type = "password";
+                   }
+                }
+                       function Hidepassword() {
+                         var x = document.getElementById("passid");
+                           if (x.type === "text")
+                           {
+                             x.type = "password";
+                           }           
+                       }
+               
+            </script>
+        }
+              

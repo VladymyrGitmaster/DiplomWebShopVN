@@ -1,0 +1,141 @@
+﻿
+@model DiplomWebShopVN.Models.DTO.LoginModel
+
+@*@{
+    Layout = null;
+}*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+  
+        <style>
+            #bodyrenderid {
+            background-image: url('/images/xecooboi-more-palmy-10185.jpg.pagespeed.ic.mivntko2gr.jpg');
+            background-repeat:space;
+            background-size: cover;
+            }
+        </style>
+    
+    <style>
+        form{
+            border: 4px dashed #f1f1f1;
+            width:60%;
+            margin:auto;
+            margin-top:3%;
+            margin-bottom: 3%;
+            
+        }
+        input[type=text],input[type=password]{
+            width:100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc
+        }
+        button {
+            border-radius: 5px;
+            background-color: yellow;
+            color:blue;
+            font-size:x-large;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor:pointer;
+            width: 100%;
+        }
+        .container{
+            padding:16px;
+        }
+        .msg{
+            text-align:center;
+            padding:0px;
+        }
+        .err{
+            color:red; 
+        }
+
+        #sbmtBtn:hover{
+            border:1px solid blue;
+        }
+    </style>
+    <style>
+        #showpassimg {
+            opacity: 0.6;
+        }
+
+            #showpassimg:hover {
+                opacity: 1;
+            }
+    </style>
+
+</head>
+<body>
+
+    
+        <form asp-action="Login" method="post">
+        <div class="container">
+            <label style="font-weight:500; color:white;" asp-for="UserName">Введіть своє Ім'я користувача: </label>
+            <input type="text" asp-for="UserName"/>
+            <div class="msg">
+                <span class="err" asp-validation-for="UserName"></span>
+            </div>
+
+            <label style="font-weight:500; color:white;" asp-for="Password">Введіть свій пароль: </label>
+            <div class="d-flex flex-row">
+                <input onfocus="Hidepassword()" id="passid" type="password" asp-for="Password" />
+                    <img onclick="ShowPassword()" style="width:35px; height:35px; margin-top:15px;" id="showpassimg" src="~/images/show_icon_183921.png" />
+            </div>
+            <div class="msg">
+                <span class="err" asp-validation-for="Password"></span>
+            </div>
+            @if (TempData["msg"] != null)
+            {
+                <div class="msg">
+                    <span class="err">@TempData["msg"]</span>
+                </div>
+            }
+            
+            <div class="d-flex flex-row m-1">
+                <button id="sbmtBtn" type="submit">Увійти</button>
+                <a class="btn btn-info m-1" asp-action="GoogleLogin"> <img src="~/images/google_icon-icons.com_62736.png" />Google</a>
+           </div>
+            <div class="d-flex flex-row m-1 align-items-center">
+            <a class="btn btn-primary m-1" href="/UserAuthentication/Registration"><h3 style="color:black; font-weight:400;">Реєстрація</h3></a><br />
+            <a class="btn btn-success m-1" href="/Home/Index"><h4 style="color:yellow; font-weight:400;">Головна</h4></a>
+            </div>
+        </div>
+        </form>
+    
+
+</body>
+</html>
+@section Scripts{
+           
+            <script type="text/javascript">
+            
+                function ShowPassword()
+                {
+                   var x = document.getElementById("passid");
+                   if (x.type === "password") 
+                   {
+                    x.type = "text";
+                   } 
+                   else 
+                   {
+                    x.type = "password";
+                   }
+                }
+                       function Hidepassword() {
+                         var x = document.getElementById("passid");
+                           if (x.type === "text")
+                           {
+                             x.type = "password";
+                           }           
+                       }
+               
+            </script>
+            }

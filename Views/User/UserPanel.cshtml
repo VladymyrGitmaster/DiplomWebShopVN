@@ -1,0 +1,44 @@
+﻿@using DiplomWebShopVN.Models.Domain
+@model ApplicationUser 
+
+<div style="display:flex; justify-content:center; color:darkgoldenrod;">
+<h4 >Панель Користувача:</h4>
+</div>
+
+<div class="card d-flex flex-column border-2 border-primary">
+    <div class="row">
+        <div class="m-1">
+            <a asp-action="UserPanel" asp-controller="User" style="text-decoration:none;">
+                @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                {
+                    <img src="~/images/@Model.ProfilePicture" alt="Фото користувачя"  style="height:100px; width:100px; border: 1px solid yellow; border-radius:50px;" />
+                }
+                else
+                {
+                    <img src="~/images/user_person_profile_avatar_icon_190943.png" alt="Фото користувачя"  style="height:100px; width:100px; border: 1px solid yellow; border-radius:50px;" />
+                }
+            </a>
+        </div>
+        <div style="color: darkblue; font-size:large; font-weight:500;">
+            Прізвище : @Model.Prizvyshe
+        </div>
+        <div style="color: darkblue; font-size:large; font-weight:500;">
+            Ім'я : @Model.Name
+        </div>
+        <div style ="color:darkgreen; font-size:large; font-weight:500;">
+            Электронна пошта : @Model.Email
+        </div>
+        <div style="color:darkmagenta; font-size:large; font-weight:500;">
+            Телефон : @Model.PhoneNumber
+        </div>
+        <div style="color:orangered; font-size:large; font-weight:500;">
+            Знижка на товари : @Model.Discont %
+        </div>
+        <div>
+            <a asp-action="EditUserProfile" class="btn btn-dark m-1">Редагувати</a>
+        </div>
+        
+    </div>
+</div>
+
+<a class="btn btn-info mt-2" asp-action="ListOrders">Показати список замовлень</a>

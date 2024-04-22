@@ -1,0 +1,83 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.productsHomeContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: auto;
+    width: 90vw;
+    border: 2px dashed yellow;
+    justify-content: center;
+}
+
+.productsCard, .productsCard0 {
+    display: flex;
+    flex-direction: column;
+   /* color: darkslategrey;*/
+    height: auto;
+    width: 300px;
+    /*border: 1px solid gray;*/
+    border-radius: 10px;
+    margin: 15px;
+    /*background-color: honeydew;*/
+    background-image: linear-gradient(to right bottom, #fed5d5, #fad6e6, #eddaf5, #dbe0fe, #c8e6ff, #b5eaff, #a1efff, #91f3f7, #77f7ec, #66fada, #66fbc0, #77fba1);
+}
+
+    .productsCard:hover {
+        /* box-shadow: 0px 0px 15px 5px yellow;*/
+        box-shadow: -1px -1px 10px blue, 7px 7px 10px yellow;
+    }
+
+    .productsCard0:hover {
+        opacity: 0.7;
+    }
+
+.stars:hover {
+    scale: 1.5;
+}
+
+.basket:hover {
+    scale: 1.3;
+}
+
+.hoveronimg {
+    opacity: 0.7;
+}
+
+    .hoveronimg:hover {
+        opacity: 1;
+        scale: 1.1;
+        cursor:pointer;
+    }
+#headerclass {
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0px 1px 20px gray;
+    background: linear-gradient(180deg, rgba(22,104,195,1) 0%, rgba(19,175,200,1) 44%, rgba(241,255,0,1) 100%);
+}
+#footerclass {
+    background-image: linear-gradient(to left top, #2a19e0, #c200ae, #f80076, #ff2047, #ff7520, #f29c01, #debf17, #c5dd45, #9eea74, #7af3a2, #60f8ce, #5ffbf1);
+}
+#cardclass {
+    background-image: linear-gradient(to right bottom, #f9dcdc, #f8dee9, #f0e2f5, #e5e7fd, #daedff, #cff1ff, #c4f5ff, #bcf8fb, #affbf5, #a7fde9, #a5ffd9, #acffc6);
+/*    background-image: linear-gradient(to right bottom, #fed5d5, #fad6e6, #eddaf5, #dbe0fe, #c8e6ff, #b5eaff, #a1efff, #91f3f7, #77f7ec, #66fada, #66fbc0, #77fba1);
+*/}
+/*background-image: linear-gradient(to right bottom, #fe3737, #ff4c9c, #d883e8, #95aeff, #71caff, #4ed8ff, #21e6ff, #00f2f8, #00f9e4, #00fdc2, #00ff91, #00ff50);
+*/
+/*background-image: linear-gradient(to right bottom, #e9fe2f, #acff6f, #72ffa4, #41ffd0, #43f6ef, #35f5f2, #24f3f5, #00f2f8, #00f9e4, #00fdc2, #00ff91, #00ff50);*/

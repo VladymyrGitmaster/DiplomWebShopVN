@@ -1,0 +1,60 @@
+﻿@using DiplomWebShopVN.Models
+@model Product
+@{
+    ViewData["Title"] = "Create Product Page";
+    List<Category> listCategories = ViewData["ListCategories"] as List<Category>;
+    <div class="row">
+    <div class="col-md-12">
+    <form id="crprodform" autocomplete="off" method="post" asp-action="CreateProduct" enctype="multipart/form-data">
+            <h3 style="color:blue; text-align:center">Create New Product Form</h3>
+            <div class="form-group">
+            <label asp-for="Name">Enter product Name: </label>
+            <input maxlength="25" class="form-control" asp-for="Name"/>
+            <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="ShortDescription">Enter Short Description: </label>
+            <input maxlength="100"  class="form-control" asp-for="ShortDescription" />
+            <span class="text-danger" asp-validation-for="ShortDescription"></span>
+            </div>
+            <div class="form-group">
+            <label asp-for="LongDescription">Enter Long Description: </label>
+            <input maxlength="500" class="form-control" asp-for="LongDescription" />
+            <span class="text-danger" asp-validation-for="LongDescription"></span>
+            </div>
+            <div class="form-group">
+            <label for="Photos">Вибрати фото: (максимум 15 фото)</label>
+            <input onchange="Trycount()" id="inphotos" class="form-control" type="file" value="@null" name="Photos" multiple />
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId">Enter Category: </label>
+                <select class="form-control" asp-for="CategoryId">  
+                    @foreach( var item in listCategories)
+                    {
+                     <option value="@item.Id">
+                         @item.CategoryName - @item.Description
+                     </option>
+                    }                  
+                 </select>
+                <span class="text-danger" asp-validation-for="CategoryId"></span>
+            </div>
+            <p>
+            <br />
+            <input class="btn btn-success" type="submit" value="Submit" />
+            </p>      
+    </form>
+    </div>
+</div>
+}
+@section Scripts {
+    <script type="text/javascript">
+          function Trycount() {
+                var $fileUpload = $("input[type='file']");
+                if (parseInt($fileUpload.get(0).files.length) > 15){                  
+                    var element = document.getElementById("crprodform");
+                    element.reset();    
+                    alert("You are only allowed to upload a maximum of 15 files");
+                   }
+              }
+    </script>
+}

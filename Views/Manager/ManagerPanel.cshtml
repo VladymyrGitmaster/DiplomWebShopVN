@@ -1,0 +1,88 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "Manager Panel";
+}
+
+<div class="d-flex flex-row">
+    <div class="m-1">
+        <a class="btn btn-primary text-black mt-3 mb-1" asp-action="CreateCategory"><h2>Create Category</h2></a> <br />
+    </div>
+    <div class="m-1">
+        <a class="btn btn-success text-black mt-3 mb-1" asp-action="CreateProduct"><h2>Create Product</h2></a> <br />
+    </div>
+</div>
+
+<br/>
+
+<div class="m-1 d-flex flex-row">
+    <form asp-action="OrderDetails" method="get">
+       <label class="form-label" for="findOrder">Знайти по номеру замовлення:</label>
+        <div class="d-flex flex-row">
+            <input class="form-control" name="id" type="text" value="@null"/>
+        <input class="btn btn-success m-1" type="submit" value="Пошук"/>
+        </div>
+    </form>
+</div>
+
+@{
+    @if (Model.Count > 0)
+    {
+        <h4 style="color:darkmagenta; margin-left:10px; margin-bottom:10px; margin-top:10px; display:flex; justify-content:center;"> Список взятих та вільних замовлень: </h4>
+        <div class="d-flex flex-column">
+            @foreach (var item in Model)
+            {
+                @if (item.ManagerId != null)
+                {
+                    <div class="m-1 card card-body bg-dark">
+                        <div class="card card-header d-flex flex-row">
+                            <div class="text-primary m-1">Ім'я менеджера: @User.Identity.Name </div>
+                            <div class="text-danger m-1" style="font-size:large; font-weight:500;">Статус замовлення: @item.Status</div>
+                            <div style="font-weight:500; color:white;" class="m-1">Номер замовлення: @item.Id</div>
+                            <div class="text-primary m-1">Ім'я користувача: @item.User.Name</div>
+                        </div>
+                        <div class="text-white">Кількість товарів: @item.CountProducts шт.</div>
+                        <div class="text-white">Ціна замовлення: @item.OrderPrice грн.</div>
+                        <div class="text-white">Місто: @item.DeliveryCity</div>
+                        <div class="card card-footer">
+                            <div class="text-success">Коментар користувача: @item.UserComents</div>
+                            <div class="text-white">Дата та час замовлення: @item.OrderDateTime</div>
+                        </div>
+                        <form asp-controller="Manager" asp-action="OrderDetails" asp-route-id="@item.Id" method="post">
+                        <input class="btn btn-info mt-1" type="submit" value="Деталі замовлення"/>
+                        </form>
+                    </div>
+                }                                                 
+            }
+            @foreach (var item in Model)
+            {
+                @if (item.ManagerId == null)
+                {
+                <div class="m-1 card card-body">
+                    <div class="card card-header d-flex flex-row">
+                        <div style="color:darkmagenta; font-weight:500;" class="m-1">Статус замовлення: @item.Status</div>
+                            <div style="font-weight:500;" class="m-1">Номер замовлення: @item.Id</div>
+                        <div class="text-primary m-1">Ім'я користувача: @item.User.Name</div>
+                    </div>
+                    <div>Кількість товарів: @item.CountProducts шт.</div>
+                        <div>Ціна замовлення: @item.OrderPrice грн.</div>
+                    <div>Місто: @item.DeliveryCity</div>
+                    <div class="card card-footer">
+                        <div class="text-success">Коментар користувача: @item.UserComents</div>
+                        <div>Дата та час замовлення: @item.OrderDateTime</div>
+                    </div>
+                        <form asp-action="TakeOrder" method="post" asp-route-id="@item.Id">
+                            <input class="btn btn-success mt-1" type="submit" value="Взяти в роботу" />
+                        </form>                    
+                </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <h4>Список замовлень порожній. </h4>
+    }
+}
+
+
+

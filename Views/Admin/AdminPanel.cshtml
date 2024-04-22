@@ -1,0 +1,155 @@
+﻿@using DiplomWebShopVN.Models.ViewModels
+@model AdminListUsersView
+
+@{
+    ViewBag.Title = "Admin Panel All Users";
+}
+
+@if (TempData["msg"] != null)
+{
+    <div class="form-group">
+        <h4 class="alert-info">@TempData["msg"]</h4>
+    </div>
+    @*@if ((int)TempData["statuscode"] == 1)
+    {
+        <script type="text/javascript">
+            function sleep(ms) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(ms);
+                    }, ms);
+                })
+            }
+            async function myFunction() {
+                await sleep(5000);
+                window.location.replace("/UserAuthentication/Login");
+            }
+            myFunction();
+        </script>
+    }*@
+    @*<script type="text/javascript">
+
+    function myfunc() {
+        document.getElementById('myInput').removeAttribute('readonly');
+    }
+    window.onload = function () {
+        var a = document.getElementById('myInput');
+        a.value = "12345";
+    }
+</script>*@
+}
+<h1>All Users: </h1>
+
+
+@if (Model != null)
+{
+    int i = 0;
+        foreach (var user in Model.ListUsers)
+        {
+         <form asp-action="EditUserRole" method="post">
+            <div class="card mb-2">
+            <div class="card-header">
+                    <input style="color:green; border:none; background:none;" asp-for="ListUsers[0].Id" value="@user.Id" readonly="readonly">          
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">UserName = @user.UserName</h5>
+                <h5 class="card-title">Name = @user.Name</h5>
+                 
+                        <label asp-for="ListRoles[0]"><h5>User Role = </h5></label>
+                        <select class="sellist" onchange="activeEditBtn(@i);" style="color:blue; font-size:large;" asp-for="ListRoles[0]">
+                            @if (Model.ListRoles[i] == "admin")
+                            {
+                                if(user.UserName!= "Admin")
+                                {
+                                    <option style="color:darkviolet; font-size:large;" value="manager">Set Manager</option>
+                                    <option style="color:green; font-size:large;" value="user">Set User</option>
+                                    <option style="color:blue; font-size:large;" value="@Model.ListRoles[i]" selected hidden>@Model.ListRoles[i]</option>
+                                }
+                                <option style="color:blue; font-size:large;" value="@Model.ListRoles[i]" selected hidden>@Model.ListRoles[i]</option>                               
+                            }
+                            else if (Model.ListRoles[i] == "manager")
+                            {
+                                <option style="color:red; font-size:large;" value="admin">Set Admin</option>
+                                <option style="color:green; font-size:large;" value="user">Set User</option>
+                                <option style="color:blue; font-size:large;" value="@Model.ListRoles[i]" selected hidden>@Model.ListRoles[i]</option>
+                            }
+                            else if (Model.ListRoles[i] == "user")
+                            {
+                                <option style="color:red; font-size:large;" value="admin">Set Admin</option>
+                                <option style="color:darkviolet; font-size:large;" value="manager">Set Manager</option>
+                                <option style="color:blue; font-size:large;" value="@Model.ListRoles[i]" selected hidden>@Model.ListRoles[i]</option>
+                            }
+                            else if (Model.ListRoles[i] == "guest")
+                            {
+                                <option style="color:black; font-size:large;" value="@Model.ListRoles[i]" selected hidden>@Model.ListRoles[i]</option>
+                            }
+                        </select>
+                        <input type="hidden" asp-for="object_number" value="@i">
+                    
+            </div>
+                   <div class="card-footer">
+                        <div class="flex-row d-flex btn-group-sm">
+                            <div class="btn-group me-3">
+                                <span class="displayEditBtn" style="display:none;">
+                                    <input class="btn btn-success" type="submit" value="Edit Role">
+                                </span>
+                            </div>
+                            <script type="text/javascript">                               
+                                function activeEditBtn(x) {                                   
+                                    let btn = document.getElementsByClassName('displayEditBtn');
+                                    let selects = document.getElementsByClassName('sellist');
+                                    btn[x].style = "display:unset;";
+                                   for (const property in btn){
+                                       if(x!=property)
+                                        btn[property].style = "display:none;";
+                                     
+                                   }
+                                   for (const property in selects){
+                                        if (x != property){
+                                            var options = selects[property].options;
+                                            options[2].selected = true;
+                                        }                                      
+                                   }                                                                  
+                                }
+                            </script>
+                         @*    <script type="text/javascript">
+                                function SameSelected(y, curVariant) {
+                                    var selects = document.getElementsByClassName('sellist');
+                                    var selVariant;
+                                    var options = selects[y].options;
+                                    for (var i = 0; l = options.length; i < l; i++) {
+                                        if (options[i].selected) {
+                                            selVariant = options[i];
+                                        }
+                                    }
+                                    if (selVariant == curVariant) {                            
+                                       window.location.href = "/Admin/AdminPanel";                                       
+                                    }
+                                }
+                             </script>*@
+                        <div class="btn-group">
+                        @if(user.UserName!= "Admin")
+                        {                     
+                            <a class="btn btn-danger" href="/Admin/DeleteUser/@user.Id">Delete User</a>                       
+                        }
+                        </div>
+                        
+                   </div>                
+            </div>
+        </div>
+        </form>   
+         i = i + 1; 
+        }             
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Users created yet.
+        </div>
+        <div class="card-body">
+            Create new Users.
+        </div>
+    </div>
+}
+

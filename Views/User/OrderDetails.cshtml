@@ -1,0 +1,119 @@
+﻿    @using DiplomWebShopVN.Models.ViewModels
+@model OrderDetailsView
+
+<div class="card card-body">
+
+    <div class="card-header">
+        <div class="m-1">
+            @if (Model.CurrentOrder.User.ProfilePicture != null)
+            {
+                <img style="height:100px; width:100px; border: 1px solid yellow; border-radius:50px;" src="~/images/@Model.CurrentOrder.User.ProfilePicture" />
+            }
+            else
+            {
+                <img style="height:100px; width:100px; border: 1px solid yellow; border-radius:50px;" src="~/images/user_person_profile_avatar_icon_190943.png" />
+            }
+        </div>
+         <div style="color:darkblue; font-weight:500;">
+            Ім'я клієнта: @Model.CurrentOrder.User.Name
+        </div>
+        <div style="color:darkblue; font-weight:500;">
+            Прізвище клієнта: @Model.CurrentOrder.User.Prizvyshe
+        </div>
+        <div style="color:darkmagenta; font-weight:500;">
+            Телефон клієнта: @Model.CurrentOrder.User.PhoneNumber
+        </div>
+        <div>
+            Електронна пошта клієнта: @Model.CurrentOrder.User.Email
+        </div>
+        <div>
+            Дата замовлення: @Model.CurrentOrder.OrderDateTime
+        </div>
+        <div>
+            Загальна кількість товарів: @Model.CurrentOrder.CountProducts шт.
+        </div>
+        <div style="color:orangered;">
+            Дисконт: @Model.CurrentOrder.Discont %.
+        </div>
+        <div style="font-size:large; font-weight:500;">
+            Загальна сума замовлення до сплати: <span style="color:darkgreen;">@Model.CurrentOrder.OrderPrice грн.</span>
+        </div>
+    </div>
+    <div class="card card-body mt-1">
+        <h6 style="color:darkgreen">Отримувач:</h6>
+        <div style="color:darkblue; font-weight:600;">
+            Ім'я: @Model.CurrentOrder.Name
+        </div>
+        <div style="color:darkblue; font-weight:600;">
+            Прізвище: @Model.CurrentOrder.Prizvyshe
+        </div>
+        <div style="color:darkmagenta; font-weight:600;">
+            Телефон: @Model.CurrentOrder.Phone
+        </div>
+        <div>
+            Електронна пошта: @Model.CurrentOrder.Email
+        </div>
+    </div>
+    <div class="card-footer mt-1">
+        <div class="text-danger" style="font-weight:500;">
+            Статус замовлення: @Model.CurrentOrder.Status
+        </div>
+        <div>
+            Метод доставки: @Model.CurrentOrder.DeliveryMethod
+        </div>
+        <div>
+            Область: @Model.CurrentOrder.DeliveryRegion
+        </div>
+        <div>
+            Місто: @Model.CurrentOrder.DeliveryCity
+        </div>
+        <div>
+            Адреса / Номер відділення: @Model.CurrentOrder.DeliveryAdress
+        </div>
+        <div class="card card-body" style="color:darkgreen; font-weight:500;">
+            Коментар до замовлення: @Model.CurrentOrder.UserComents
+        </div>
+        <div>
+            Деталі замовлення: @Model.CurrentOrder.OrderDetails
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-row flex-wrap justify-content-center">
+    @if (Model.OrderProducts.Count > 0)
+    {
+        @foreach (var prod in Model.OrderProducts)
+        {
+            <div class="productsCard">
+                <a asp-action="Details" asp-controller="Home" asp-route-id="@prod.ProductInBasket.Id">
+                    <img src="~/images/@prod.ProductInBasket.Image" width="300" height="200" style="border-radius:10px 10px 0px 0px" />
+                </a>
+                <h6 style="margin:5px; color:darkblue;">@prod.ProductInBasket.Name</h6>
+                <h8 style="margin:5px;">@prod.ProductInBasket.ShortDescription</h8>
+                <div style="display:flex; flex-direction:row; height:16px; width:max-content; margin:10px;">
+
+                    @if (@prod.ProductInBasket.Rating >= 0 && @prod.ProductInBasket.Rating <= 5)
+                    {
+                        @for (int b = 0; b < @prod.ProductInBasket.Rating; b++)
+                        {
+                            <img src="~/images/stars_118606.png" style="height: 15px; width: 15px; margin-right: 2px;" />
+                        }
+                        @for (int i = 0; i < (5 - @prod.ProductInBasket.Rating); i++)
+                        {
+                            <img src="~/images/stars_118606.png" style="opacity:0.5; height: 15px; width: 15px; margin-right: 2px;" />
+                        }
+                    }
+
+                </div>
+                <div style="display:flex; flex-direction:row; justify-content:space-evenly; color: green; height:auto; width:auto; margin:10px;">
+                    <div style="margin: 2px;">Кількість: @prod.Count шт.</div>
+                    <div style="margin: 2px;">Ціна за один: @prod.CurrentPrice грн.</div>
+                    @{
+                        var TotalcountPrice = prod.CurrentPrice * prod.Count;
+                    }
+                    <div style="margin: 2px;">Ціна за всі: @TotalcountPrice грн.</div>
+                </div>
+            </div>
+        }
+    }
+</div>

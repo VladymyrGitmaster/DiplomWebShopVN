@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @*runat="server"*@
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BPs</title>
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="~/favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DiplomWebShopVN.styles.css" asp-append-version="true" /> 
+    <style>
+        #baskettext{
+            position: absolute;
+            top: 16px;
+            right: 32px;
+            font-size: 14px;
+            border: 1px solid black;
+            border-radius:25px;
+            height:25px;
+            width:25px;
+            display:flex;
+            justify-content:center;
+            background-color: darkgreen;
+            color: white;
+            font-weight:500;
+        }
+
+        #homebtn:hover,#privacybtn:hover {
+         font-weight:600;
+        }        
+        #inidbtn, #outidbtn{
+         opacity:0.9;
+        }
+        #inidbtn:hover{
+          scale:1.1;
+          opacity:1;
+        }
+
+        #outidbtn:hover {
+            scale: 0.9;
+          opacity: 1;
+        }
+    </style>
+</head>
+<body id="bodyrenderid">
+    @*@inject IHttpContextAccessor accessor;*@
+    @* @accessor.HttpContext.Session.GetString("mystr")*@
+    <header>
+        @*bg-white*@
+        <nav id="headerclass" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.jpg" height="50" width="100" style="border-radius:10px; border: dashed 2px blue;" />
+                    @*BPs*@
+                    </a>
+                <button onclick="FollowBasket()" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li id="homebtn" class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
+                        </li>
+                        <li id="privacybtn" class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Конфіденційність</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                        {                                               
+                        <li class="nav-item">
+                                <a style="color:darkmagenta; font-size:medium; font-weight:600;" class="nav-link" asp-area="" asp-controller="Admin" asp-action="AdminPanel">Admin Panel</a>
+                        </li>
+                        }
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("manager"))
+                        {
+                            <li class="nav-item">
+                                <a style="color:darkmagenta; font-size:medium; font-weight:600;" class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManagerPanel">Manager Panel</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <div id="outidbtn" style="width:max-content; border-radius: 10px; background-color:darkgreen;">
+                                <a class="nav-link text-white" asp-area="" asp-controller="UserAuthentication" asp-action="Logout">Вийти</a>
+                                </div>
+                            </li>
+                        }
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <div id="inidbtn" style="width:max-content; border-radius: 10px; background-color: yellow;">
+                                    <a style="color:blue;" class="nav-link" asp-area="" asp-controller="UserAuthentication" asp-action="Login">Увійти</a>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span style="font-size:large;">
+                        Користувач
+                        @{
+                            string userImage = Url.ActionContext.HttpContext.Session.GetString("userimg");
+                        }
+                        <a asp-action="UserPanel" asp-controller="User" style="text-decoration:none;">
+                            @if (!string.IsNullOrEmpty(userImage))
+                            {
+                                <img src="~/images/@userImage" style="border-radius:25px; height:40px; width:40px;" />
+                            }
+                            else
+                            {
+                                <img src="~/images/user_person_profile_avatar_icon_190943.png" style="border-radius:25px; height:40px; width:40px;" />
+                            }
+                        </a>
+                    <span style="color:darkblue;">@User.Identity.Name</span></span>
+                }
+                else
+                {
+                    <span style="font-size:large;">Користувач Гість</span>
+                }  
+                @if(User.Identity.IsAuthenticated){
+                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Basket">
+                    <img src="~/images/2849824-basket-buy-market-multimedia-shop-shopping-store_107977.png" height="45" width="45" />
+                    @{
+                        int? basketCount = Url.ActionContext.HttpContext.Session.GetInt32("basketcount");
+                    }
+                    @if (User.Identity.IsAuthenticated && basketCount > 0)
+                    {
+                        <div id="baskettext">@basketCount</div>
+                    }
+                </a>
+                }
+                else @*If NOT REgistered BASKET*@
+                {
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="BasketNotRegistered">                  
+                    <img src="~/images/2849824-basket-buy-market-multimedia-shop-shopping-store_107977.png" height="45" width="45" />
+                    @{
+                        int? basketCountNotRegistered = Url.ActionContext.HttpContext.Session.GetInt32("basketcountNotRegistered");
+                    }
+                    @if (basketCountNotRegistered > 0)
+                    {
+                        <div id="baskettext">@basketCountNotRegistered</div>
+                    }
+                </a>
+                }
+         
+                
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        @{
+            @if (ViewData["Status"] != null)
+            {
+                <div id="statusmsg" class="card card-body text-primary text-center"><h5>@ViewData["Status"]</h5></div>
+            }
+            else if (TempData["Status"] != null)
+            {
+                <div id="statusmsg" class="card card-body text-success text-center align-items-center"><h5>@TempData["Status"]</h5></div>
+            }
+        }
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer style="border-radius: 15px 15px 0 0;" id ="footerclass" class="border-top footer text-muted">
+        <div  class="container" style="color:black;">
+            &copy; 2024 Best product Site &reg;
+            <a class="btn btn-info rounded-circle" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a class="btn btn-primary rounded-circle" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </div>       
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        function sleep(ms) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(ms);
+                }, ms);
+            })
+        }
+        async function myFunction() {
+            await sleep(5000);
+            var a = document.getElementById('statusmsg');
+            a.style = 'display:none;';
+        }
+        myFunction();
+        function FollowBasket() {
+            var b = document.getElementById('baskettext');           
+            if (b.style.visibility == "hidden")
+                b.style.visibility = "visible";
+            else b.style.visibility = "hidden";
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

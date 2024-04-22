@@ -1,0 +1,38 @@
+﻿@model List<Order>
+
+@{
+    @if(Model.Count > 0)
+    {
+        <h4 style="color:darkblue; margin-left:10px;">Ваші замовлення: </h4>
+        <div class="d-flex flex-column">
+            @for(int i = Model.Count-1; i >= 0; i--)
+            {
+                <div class="m-1 card card-body">
+                    <div class="card card-header" style="font-size:large;font-weight:bold;">
+                        Номер замовлення: @Model[i].Id
+                    </div>
+                    <div>Кількість товарів: @Model[i].CountProducts шт.</div>
+                    <div>Ціна замовлення: @Model[i].OrderPrice грн.</div>
+                    <div class="card card-footer">
+                        <div style="color:darkmagenta;">Статус замовлення: @Model[i].Status</div>
+                        <div class="text-success">Деталі по замовленню: @Model[i].OrderDetails</div>
+                        <div>Дата та час замовлення: @Model[i].OrderDateTime</div>
+                    </div>
+                    <form asp-action="OrderDetails" asp-controller="User" method="post" asp-route-id="@Model[i].Id">
+                    <input class="btn btn-success mt-1" type="submit" value="Деталі замовлення"/>
+                    </form>
+                    @if(Model[i].Status == "new")
+                    {
+                    <form asp-action="CancelOrder" asp-controller="User" method="post" asp-route-id="@Model[i].Id">
+                    <input class="btn btn-dark mt-1" type="submit" value="Відмінити замовлення"/>
+                    </form> 
+                    }                 
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h4>Список замовлень порожній. </h4>
+    }
+}

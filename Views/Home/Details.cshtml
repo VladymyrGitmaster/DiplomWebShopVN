@@ -1,0 +1,197 @@
+﻿@model Product;
+@{
+    ViewData["Title"] = "Details Page";
+    List<ProductComent> listComents = ViewData["coments"] as List<ProductComent>;
+    var location = new Uri($"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}");
+    var ReturnUrl = location.AbsoluteUri;
+}
+    <h3 style="color:darkviolet;">"@Model.Name"</h3>
+
+<div id="cardclass" class="card d-flex flex-row">
+    <img class="img w-50 rounded-start" src="~/images/@Model.Image" alt="@Model.Name Image" />
+    <div class="card-body bg-transparent d-flex flex-column overflow-auto">
+        <h6 class="flex-column h6" style="color:darkblue;">
+                Назва: @Model.Name
+            </h6>
+            <div class="flex-column h6">
+                 <h6>
+                Повний опис: @Model.LongDescription
+                 </h6>
+            </div>
+      
+            <h6 style="color:darkorange;">
+               Категорія: @Model.ProductCategory.CategoryName
+            </h6>
+            <h6>
+               Опис Категорії: @Model.ProductCategory.Description
+            </h6>
+        <div class="d-flex flex-row">
+            @{              
+                if (@Model.Rating >= 0 && @Model.Rating <= 5)
+                {
+                    int b;
+                    for (b = 1; b <= @Model.Rating; b++)
+                    {
+                  
+                        <a style="text-decoration:unset" href="/home/@Model.Id/ChangeRating/@b">
+                                <img class="stars" src="~/images/stars_118606.png" style="height: 20px; width: 20px; margin-right: 2px;" />
+                        </a>     
+                    }
+                    for (int i = b; i <= 5; i++)
+                    {
+                    <a style="text-decoration:unset" href="/home/@Model.Id/ChangeRating/@i">
+                    <img class="stars" src="~/images/stars_118606.png" style="opacity:0.5; height: 20px; width: 20px; margin-right: 2px;" />
+                    </a>
+                       
+                    }                      
+                }                 
+            }
+        </div>
+           
+            @if (@Model.Votes > 0)
+            {
+                <div>Всього оцінок: @Model.Votes.</div>
+            }
+            else
+            {
+                <div>Оцінки відсутні.</div>
+            }
+          
+
+            @if (Model.Count < 1)
+            {
+            <div style="color:red;">Товар закінчився.</div>
+            <div class="card-footer mt-3">
+                <h5 style="color:darkblue;">
+                    Остання ціна: @Model.Price грн.
+                </h5>
+            </div>
+            }
+            else
+            {
+            <div class="card-footer mt-3">
+                <h5 style="color:green;">
+                    Ціна: @Model.Price грн.
+                </h5>
+            </div>
+        }
+       
+       
+        
+            @if (Model.Count > 0)
+            {
+                @if (User.Identity.IsAuthenticated)
+                {
+                           <a asp-area="" asp-controller="Order" asp-action="AddToBasket" asp-route-id="@Model.Id" asp-route-rUrl="@ReturnUrl" style="margin-left:10px; margin-right:10px;">
+                        <img class="basket" src="~/images/buy-48_45560.png" style=" height:50px; width:50px;" />
+                    </a>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="AddToBasketNotregistered" asp-route-id="@Model.Id" asp-route-rUrl="@ReturnUrl" style="margin-left:10px; margin-right:10px;">
+                        <img class="basket" src="~/images/buy-48_45560.png" style=" height:50px; width:50px;" />
+                    </a>
+                }
+                         
+            }
+       
+            <div>
+            <a class="btn btn-success m-1" href='@(TempData["returnurl"] != null ? TempData["returnurl"] : "/home/index")'>Продовжити перегляд товарів</a>
+            </div>
+        @if(User.IsInRole("manager") && User.Identity.IsAuthenticated)
+        {
+            <div>
+            <a class="btn btn-dark m-1" asp-controller="Manager" asp-action="EditProduct" asp-route-id="@Model.Id">Edit Product</a>
+            </div>   
+        }
+     
+        </div>
+</div>
+    
+@*<PHOTOS>*@
+<div id="carouselExampleIndicators" class="carousel slide card card-body m-3 justify-content-center" style="max-height:1200px; height-auto; width:auto; background-image: linear-gradient(to right bottom, #f25f17, #f7363f, #ef0060, #da0082, #b500a0, #c4009c, #d20098, #df0093, #ff326b, #ff6f40, #ffa80f, #eddc12);">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button> 
+        @for (int i = 0; i < Model.Photos.Count-1; i++)
+        {
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@(i+1)" aria-label="Slide @(i+1)"></button>
+        }
+    </div>
+    <div class="carousel-inner">
+        @foreach (Photo photo in Model.Photos)
+        {
+        <div class='@(photo == Model.Photos.FirstOrDefault() ? "carousel-item active" : "carousel-item")'>
+                <img src="@photo.PhotoUrl" class="d-block w-100" style="height:auto;" alt="@photo.Filename">
+                @*<img src="@photo.PhotoUrl" class="d-block w-100" alt="@photo.Filename">*@
+        </div>
+        }
+    </div>
+    @if(Model.Photos.Count > 1)
+    {
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>  
+    }
+    </div>
+@*</PHOTOS>*@
+
+
+@if (User.IsInRole("user"))
+    {
+        <div class="mt-4 mb-2">
+        <form method="post" asp-action="AddComent">
+                <div class="form-group">
+                    <label for="incoment">Введіть свій коментар:</label>
+                    <input class="form-control"  maxlength="200" type="text" name="incoment" />
+                    <input type="hidden" value="@Model.Id" name="prodid" />
+                    <input class="btn btn-success mt-1" type="submit" value="Відправити" />
+                </div>
+            </form>
+        </div>
+    }
+else
+    {
+        <div class="m-3" style="color:cornflowerblue;">Щоб залишати коментарі просимо зареєструватись.</div>
+    }
+<div style="text-align:center;">
+        <h4 class="m-3" style="color:darkolivegreen;">Коментарі: </h4>
+    </div>
+
+@if (listComents.Count > 0)
+{
+
+    @foreach (ProductComent item in listComents)
+    {
+        <div class="card m-1">
+            <div class="card-header text-success">
+                @if(item.User.ProfilePicture != null)
+                {
+                    <img src="~/images/@item.User.ProfilePicture" style="border-radius:25px; height:25px; width:25px;" />
+                }
+                else
+                {
+                    <img style="border-radius:25px; height:25px; width:25px;" src="~/images/user_person_profile_avatar_icon_190943.png" />
+                }
+
+                @item.User.Name
+            </div>
+            <div class="card-body">
+                @item.ProductUserDetail
+            </div>
+            <div class="card-footer text-secondary">
+                @item.DateComent
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div style="text-align:center;">
+        <h6 class="m-3" style="color:darkolivegreen;">Коментарі наразі відсутні. </h6>
+    </div>
+}

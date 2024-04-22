@@ -1,0 +1,65 @@
+﻿@model List<BasketElement>
+
+<div class="d-flex flex-column align-content-center">
+    @if (@Model.Count > 0 && @Model != null)
+    {
+        <h5>Кошик, товари очікують замовлення:</h5>
+        int totalPrice = 0;
+        int totalElements = 0;
+
+        @for (int i = 0; i < @Model.Count; i++)
+        {
+            <div class="d-flex flex-row align-items-center m-2 card">
+                <h2>
+                    @{
+                      int pozition = i + 1;
+                     } @pozition)
+                </h2>
+
+                <a class="m-1" asp-action="Details" asp-controller="Home" asp-route-id="@Model[i].ProductId">
+                    <img width="150px" height="180" src="~/images/@Model[i].ProductInBasket.Image" />
+                </a>
+
+                <span class="m-1">
+                    @Model[i].ProductInBasket.ShortDescription
+                </span>
+
+                <div class="d-flex flex-row align-items-center">
+                    <span class="m-1">кількість: </span>
+                    <span class="hoveronimg"><a href="/Home/CountMinusNotRegistered/@Model[i].ProductId"><img style="width:25px; height:25px;" src="~/images/minusimg.png" onclick="" /></a></span>
+                    <h5 class="m-1" class="form-control m-2">@Model[i].Count</h5>
+                    <span class="hoveronimg"><a href="/Home/CountPlusNotRegistered/@Model[i].ProductId"><img style="width:25px; height:25px;" src="~/images/plusimg.png" onclick="" /></a></span>
+                </div>
+                @{
+                    int? pPrice = Model[i].ProductInBasket.Price * Model[i].Count;
+                    totalPrice = totalPrice + (int)pPrice;
+                    totalElements = totalElements + (int)(@Model[i].Count);
+                }
+                <span class="m-1">
+                    ціна: <span style="color:green; font-size:x-large;">@pPrice грн.</span>
+                </span>
+
+                <span class="hoveronimg">
+                    <a href="/Home/RemoveBasketElNotRegistered/@Model[i].ProductId"><img style="width:25px; height:25px;" src="~/images/deletebtnimg.png" /></a>
+                </span>
+
+            </div>
+        }
+        <div style="display:flex; justify-content:end; margin-right:5px; align-content:center;"> <span>Товарів у кошику: @totalElements шт.</span> <span style="align-content:center; align-items:center; margin-left:5px; margin-right:5px;">Загальна сума:</span>  <span style="color:green; margin-right:5px; font-size:x-large;">@totalPrice грн.</span></div>
+        <div class="d-flex flex-row" style="display:flex; justify-content:center;">
+            <form  asp-controller="Home" asp-action="OrderPageNotRegistered" method="post">
+                <input type="hidden" name="SessionId" value="@Url.ActionContext.HttpContext.Session.Id" />
+                <input class="btn btn-success m-2" type="submit" value="Оформити замовлення" />
+            </form>
+            <a href='@(TempData["returnurl"] != null ? TempData["returnurl"] : "/home/index")' class="btn btn-primary m-2">Продовжити перегляд</a>
+        </div>
+
+    }
+    else
+    {
+        <h5>Кошик з товарами порожній, для заповнення натисніть тут: <a class="btn btn-success" href="/home/index/">Кнопка</a> </h5>
+
+    }
+
+
+</div>

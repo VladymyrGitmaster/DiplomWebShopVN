@@ -1,0 +1,17 @@
+﻿@model Product;
+<h2 style="color:darkblue;">"@Model.Name"</h2>
+<form method="post" asp-action="AddProduct">
+    <div class="col-md-6">
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <div class="form-group">
+            <label asp-for="Count">Встановити кількість в наявності:</label>
+            <input asp-for="Count" class="form-control" placeholder="Встіновіть загальну кількість товарів." value="@Model.Count">
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Встановити ціну товару:</label>
+            <input asp-for="Price" class="form-control" placeholder="Встіновіть ціну одного товару. " value="@Model.Price">
+        </div>
+        <input class="btn btn-success m-2" type="submit" value="Підтвердити" />
+        <a class="btn btn-dark m-2" href="/Home/Index">Відміна</a>
+    </div>   
+</form>
